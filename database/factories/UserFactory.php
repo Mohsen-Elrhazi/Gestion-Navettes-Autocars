@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
+/** 
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
@@ -16,7 +17,7 @@ class UserFactory extends Factory
      */
     protected static ?string $password;
 
-    /**
+    /** 
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -26,8 +27,9 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'image' => fake()->imageUrl(200, 200, 'people'),
             'password' => static::$password ??= Hash::make('password'),
+            'role_id'=>Role::inRandomOrder()->first() ?? 1,
             'remember_token' => Str::random(10),
         ];
     }
