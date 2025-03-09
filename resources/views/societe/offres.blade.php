@@ -11,7 +11,8 @@
         <!-- Modal -->
         <div class="modal fade" id="backDropModal" data-bs-backdrop="static" tabindex="-1">
             <div class="modal-dialog modal-lg">
-                <form class="modal-content">
+                <form class="modal-content" method="POST" action="{{ route('offres.store') }}">
+                    @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="backDropModalTitle">Ajouter offre</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -21,44 +22,66 @@
                             <div class="col-md-6">
                                 <label for="start_city" class="form-label">Ville de départ</label>
                                 <input type="text" id="start_city" name="start_city" class="form-control"
-                                    placeholder="Ville de départ" required />
+                                    placeholder="Ville de départ" />
+                                @error('start_city')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="end_city" class="form-label">Ville d'arrivée</label>
                                 <input type="text" id="end_city" name="end_city" class="form-control"
-                                    placeholder="Ville d'arrivée" required />
+                                    placeholder="Ville d'arrivée" />
+                                @error('end_city')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="start_date" class="form-label">Date de départ</label>
-                                <input type="date" id="start_date" name="start_date" class="form-control" required />
+                                <input type="date" id="start_date" name="start_date" class="form-control" />
+                                @error('start_date')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="end_date" class="form-label">Date d'arrivée</label>
-                                <input type="date" id="end_date" name="end_date" class="form-control" required />
+                                <input type="date" id="end_date" name="end_date" class="form-control" />
+                                @error('end_date')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="start_time" class="form-label">Heure de départ</label>
-                                <input type="time" id="start_time" name="start_time" class="form-control" required />
+                                <input type="time" id="start_time" name="start_time" class="form-control" />
+                                @error('start_time')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="end_time" class="form-label">Heure d'arrivée</label>
-                                <input type="time" id="end_time" name="end_time" class="form-control" required />
+                                <input type="time" id="end_time" name="end_time" class="form-control" />
+                                @error('end_time')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="available_seats" class="form-label">Places disponibles</label>
-                                <input type="number" id="available_seats" name="available_seats" class="form-control"
-                                    min="0" required />
+                                <input type="number" id="available_seats" name="available_seats" class="form-control" />
+                                @error('available_seats')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="total_seats" class="form-label">Nombre total de places</label>
-                                <input type="number" id="total_seats" name="total_seats" class="form-control" min="0"
-                                    required />
+                                <input type="number" id="total_seats" name="total_seats" class="form-control" />
+                                @error('total_seats')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -66,6 +89,9 @@
                                 <label for="description" class="form-label">Description</label>
                                 <textarea id="description" name="description" class="form-control" rows="3"
                                     placeholder="Description de l'offre"></textarea>
+                                @error('description')
+                                <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -84,17 +110,48 @@
 <table class="table table-bordered mt-2 text-center align-middle">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>Start City</th>
+            <th>End City</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Available Seats</th>
+            <th>Total Seats</th>
+            <th>Actions</th>
+            <!-- <th>Description</th> -->
         </tr>
     </thead>
     <tbody>
-
+        @if(count($offres) > 0)
+        @foreach($offres as $offre)
+        <tr>
+            <td>{{ $offre->start_city }}</td>
+            <td>{{ $offre->end_city }}</td>
+            <td>{{ $offre->start_date }}</td>
+            <td>{{ $offre->end_date }}</td>
+            <td>{{ $offre->start_time }}</td>
+            <td>{{ $offre->end_time }}</td>
+            <td>{{ $offre->available_seats }}</td>
+            <td>{{ $offre->total_seats }}</td>
+            <!-- <td>{{ $offre->description }}</td> -->
+            <td>
+                <a href="{{ route('offres.edit',$offre) }}" class="btn btn-warning">Edit</a>
+                <form action="{{ route('offres.destroy', $offre) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+        @else
+        <tr>
+            <td colspan="9" class="text-center">Aucune offre disponible</td>
+        </tr>
+        @endif
     </tbody>
+
 </table>
 
 @endsection

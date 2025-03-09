@@ -127,11 +127,11 @@
                     </div>
                 </div>
             </nav>
-
+            @if(session('success'))
+            <span class="z-3 alert alert-success ">{{ session('success') }}</span> @endif
             <!-- Content -->
             <div class="content-wrapper">
                 @yield("content")
-                <!-- La partie content est laissée vide intentionnellement pour que vous puissiez la remplir -->
             </div>
         </div>
     </div>
