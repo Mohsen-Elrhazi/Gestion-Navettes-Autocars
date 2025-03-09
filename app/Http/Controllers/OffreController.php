@@ -79,9 +79,21 @@ class OffreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Offre $offre)
+    public function update(OffreRequest $request, Offre $offre)
     {
-        //
+        $offre->start_city = $request->start_city;
+        $offre->end_city = $request->end_city;
+        $offre->start_date = $request->start_date;
+        $offre->end_date = $request->end_date;
+        $offre->start_time = $request->start_time;
+        $offre->end_time = $request->end_time;
+        $offre->available_seats = $request->available_seats;
+        $offre->total_seats = $request->total_seats;
+        $offre->description = $request->description;
+
+        $offre->update();
+        
+        return redirect()->route('offres.index')->with('success', 'Offre mise à jour avec succès.');
     }
 
     /**
